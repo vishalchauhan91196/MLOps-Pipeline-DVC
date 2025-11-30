@@ -6,3 +6,4 @@ Setting DVC Pipeline:
 1. Create dvc.yaml and add stages to it.
 2. dvc init.
 3. dvc repro. (It leverages the pipeline definition specified in dvc.yaml file to automatically execute stages).(Check dvc dag)
+4. Create params.yaml and add params in respective components.
