@@ -12,13 +12,13 @@ from utils.logger import get_logger
 from utils.config import RAW_DATA_DIR
 
 
-logger = get_logger('data_preprocessing')
+logger = get_logger('data_ingestion')
 
 
 def load_data(data_url: str) -> pd.DataFrame:
     """ Load data from a CSV file. """
     try:
-        logger.debug('Starting data ingestion')
+        logger.debug('----- Starting Data Ingestion -----')
 
         df = pd.read_csv(data_url)
         logger.debug("Data loaded from %s", data_url)
@@ -61,12 +61,19 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame) -> None:
         raise     
 
 def main():
+    """ Main function to load data, preprocess it and save the raw data. """
     try:
         test_size=0.2
         data_path = "https://raw.githubusercontent.com/vishalchauhan91196/MLOps-Pipeline-DVC/refs/heads/master/experiments/spam.csv"
+
+        # Load data from source data path
         df = load_data(data_path)
+
+        # Preprocess the data
         final_df = preprocess_data(df)
         train_data, test_data = train_test_split(final_df, test_size=test_size, random_state=24)
+
+        # Save data inside data/raw
         save_data(train_data, test_data)
         
     except Exception as e:

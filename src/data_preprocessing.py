@@ -66,8 +66,20 @@ def preprocess_df(df, name, text_column='text', target_column='target') -> pd.Da
         raise
 
 
+def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame) -> None:
+    """ Save the train and test datasets. """
+    try:
+        train_data.to_csv(f"{INTERIM_DATA_DIR}/train_processed.csv", index=False)
+        test_data.to_csv(f"{INTERIM_DATA_DIR}/test_processed.csv", index=False)
+        logger.debug('Train and test data saved to %s', INTERIM_DATA_DIR)
+
+    except Exception as e:
+        logger.error("Unexpected error occurred while saving the data: %s", e)
+        raise    
+
+
 def main(text_column='text', target_column='target'):
-    """ Main function to load raw data, preprocess & transform it and save the processed data. """
+    """ Main function to load raw data, preprocess & transform it and save the interim data. """
     try:
         # Fetch data from data/raw
         train_data = pd.read_csv(f'{RAW_DATA_DIR}/train.csv')
@@ -77,13 +89,10 @@ def main(text_column='text', target_column='target'):
         # Transform the data
         train_processed_data = preprocess_df(train_data, "TRAIN", text_column, target_column)
         test_processed_data = preprocess_df(test_data, "TEST", text_column, target_column)
-        logger.debug('Preprocessing of DataFrame completed')
+        logger.debug('Data Transformation completed')
 
         # Save data inside data/interim
-        train_processed_data.to_csv(f"{INTERIM_DATA_DIR}/train_processed.csv", index=False)
-        logger.debug('Train processed data saved to %s', INTERIM_DATA_DIR)
-        test_processed_data.to_csv(f"{INTERIM_DATA_DIR}/test_processed.csv", index=False)
-        logger.debug('Test processed data saved to %s', INTERIM_DATA_DIR)
+        save_data(train_processed_data, test_processed_data)
 
     except FileNotFoundError as e:
         logger.error("File not found. %s", e)
@@ -94,7 +103,7 @@ def main(text_column='text', target_column='target'):
         raise    
 
     except Exception as e:
-        logger.error("Failed to complete the data transformation process: %s", e)
+        logger.error("Failed to complete the data transformation/ preprocessing process: %s", e)
         print(f'Error: {e}')   
 
 if __name__ == "__main__":
