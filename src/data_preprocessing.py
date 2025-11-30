@@ -21,6 +21,27 @@ nltk.download("punkt")
 
 logger = get_logger('data_preprocessing')
 
+def load_data(file_path: str) -> pd.DataFrame:
+    """ Load data from a CSV file. """
+    try:
+        logger.debug(f'----- Starting to load data from {RAW_DATA_DIR} -----')
+
+        df = pd.read_csv(file_path)
+        logger.debug("Data loaded from %s", file_path)
+        return df
+
+    except pd.errors.ParserError as e:
+        logger.error("Failed to parse the CSV file. %s", e)
+        raise
+
+    except FileNotFoundError as e:
+        logger.error('File not found: %s', e)
+        raise   
+ 
+    except Exception as e:
+        logger.error("Unexpected error occurred while loading the data: %s", e)
+        raise
+
 def transform_text(text):
     """ Transforms input text by converting it to lowercase, tokenizing, removing stopwords & punctuation , and stemming. """
     ps = PorterStemmer()
@@ -81,10 +102,9 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame) -> None:
 def main(text_column='text', target_column='target'):
     """ Main function to load raw data, preprocess & transform it and save the interim data. """
     try:
-        # Fetch data from data/raw
-        train_data = pd.read_csv(f'{RAW_DATA_DIR}/train.csv')
-        test_data = pd.read_csv(f'{RAW_DATA_DIR}/test.csv')
-        logger.debug("Train and test data loaded properly from data/raw")
+        # Load raw data
+        train_data = load_data(f'{RAW_DATA_DIR}/train.csv')
+        test_data  = load_data(f'{RAW_DATA_DIR}/test.csv')
 
         # Transform the data
         train_processed_data = preprocess_df(train_data, "TRAIN", text_column, target_column)

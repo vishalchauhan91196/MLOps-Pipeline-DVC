@@ -28,6 +28,10 @@ def load_data(data_url: str) -> pd.DataFrame:
         logger.error("Failed to parse the CSV file. %s", e)
         raise
 
+    except FileNotFoundError as e:
+        logger.error('File not found: %s', e)
+        raise
+
     except Exception as e:
         logger.error("Unexpected error occurred while loading the data: %s", e)
         raise
