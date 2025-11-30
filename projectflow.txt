@@ -1,3 +1,8 @@
 1. Add experiments folder (contains Notebook).
 2. Add src folder along with all components (Run them individually).
 3. Add data and models dir to .gitignore
+
+Setting DVC Pipeline:
+1. Create dvc.yaml and add stages to it.
+2. dvc init.
+3. dvc repro. (It leverages the pipeline definition specified in dvc.yaml file to automatically execute stages).(Check dvc dag)
