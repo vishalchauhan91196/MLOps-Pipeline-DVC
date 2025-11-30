@@ -79,7 +79,7 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame) -> None:
 
 def main():
     try:
-        max_features = 50
+        max_features = 40
 
         # Load interim data
         train_data = load_data(f'{INTERIM_DATA_DIR}/train_processed.csv')
