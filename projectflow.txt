@@ -7,3 +7,11 @@ Setting DVC Pipeline:
 2. dvc init.
 3. dvc repro. (It leverages the pipeline definition specified in dvc.yaml file to automatically execute stages).(Check dvc dag)
 4. Create params.yaml and add params in respective components.
+
+
+Adding a remote S3 storage to DVC:
+1. pip install dvc[s3]
+2. pip install awscli
+3. aws configure
+4. dvc remote add -d dvcstore s3://bucketname
+5. dvc commit; dvc push (Output that you want to store in S3)
